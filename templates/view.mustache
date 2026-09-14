@@ -1,0 +1,82 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_decision/view
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div class="mod-decision" data-region="decision-view">
+    <div class="decision-question mb-4">
+        <h3>{{question}}</h3>
+    </div>
+
+    {{#statusscheduled}}
+        <div class="alert alert-info">{{#str}}notopenyet, decision{{/str}} {{opensat}}</div>
+    {{/statusscheduled}}
+    {{#statusclosed}}
+        <div class="alert alert-secondary">{{#str}}activityclosed, decision{{/str}}</div>
+    {{/statusclosed}}
+
+    {{#canvote}}
+        <form method="post" action="{{actionurl}}" class="decision-vote-form">
+            <input type="hidden" name="sesskey" value="{{sesskey}}">
+            <input type="hidden" name="submitdecision" value="1">
+            <div class="decision-options" role="radiogroup" aria-label="{{question}}">
+                {{#options}}
+                    <label class="decision-option">
+                        <input type="radio" name="optionid" value="{{id}}" {{#selected}}checked{{/selected}} required>
+                        <span>{{text}}</span>
+                    </label>
+                {{/options}}
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">{{#str}}submitdecision, decision{{/str}}</button>
+        </form>
+    {{/canvote}}
+
+    {{#hasresponse}}
+        {{^canvote}}
+            <div class="alert alert-success">{{#str}}responsealreadyrecorded, decision{{/str}} <strong>{{chosenoption}}</strong></div>
+        {{/canvote}}
+    {{/hasresponse}}
+
+    {{#showresults}}
+        <div class="decision-inline-results mt-5">
+            <h4>{{#str}}currentresults, decision{{/str}}</h4>
+            <p>{{#str}}totalresponses, decision{{/str}}: <strong>{{total}}</strong></p>
+            {{#results}}
+                <div class="decision-result-row mb-3">
+                    <div class="d-flex justify-content-between gap-3">
+                        <span>{{text}}</span>
+                        <strong>{{count}} · {{percent}}%</strong>
+                    </div>
+                    <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar" style="width: {{percent}}%"></div>
+                    </div>
+                </div>
+            {{/results}}
+        </div>
+    {{/showresults}}
+
+    {{#canviewreport}}
+        <div class="mt-4">
+            <a class="btn btn-secondary" href="{{reporturl}}">{{#str}}viewreport, decision{{/str}}</a>
+        </div>
+    {{/canviewreport}}
+</div>

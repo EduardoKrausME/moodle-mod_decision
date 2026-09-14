@@ -1,0 +1,95 @@
+{{!
+    This file is part of Moodle - https://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_decision/report
+
+    Example context (json):
+    {
+        Aqui tem que criar o context em inglês
+    }
+}}
+<div class="mod-decision-report" data-region="decision-report" data-cmid="{{cmid}}">
+    <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div>
+            <div class="text-muted mb-1">{{#str}}question, decision{{/str}}</div>
+            <h3 class="mb-0">{{question}}</h3>
+        </div>
+        <div>
+            <label for="decision-chart-type" class="form-label mb-1">{{#str}}visualization, decision{{/str}}</label>
+            <select id="decision-chart-type" class="form-select" data-region="chart-type">
+                <option value="bar" {{#chartbarselected}}selected{{/chartbarselected}}>{{#str}}chartbar, decision{{/str}}</option>
+                <option value="pie" {{#chartpieselected}}selected{{/chartpieselected}}>{{#str}}chartpie, decision{{/str}}</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="decision-live-status mb-3">
+        <span class="badge text-bg-success">{{#str}}live, decision{{/str}}</span>
+        <span class="ms-2">{{#str}}totalresponses, decision{{/str}}: <strong data-region="total">{{total}}</strong></span>
+    </div>
+
+    <div data-region="bar-chart" class="decision-chart decision-bar-chart">
+        {{#results}}
+            <div class="decision-bar-item mb-3" data-option-id="{{id}}">
+                <div class="d-flex justify-content-between gap-3">
+                    <span data-region="label">{{text}}</span>
+                    <strong><span data-region="count">{{count}}</span> · <span data-region="percent">{{percent}}</span>%</strong>
+                </div>
+                <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" data-region="bar" style="width: {{percent}}%"></div>
+                </div>
+            </div>
+        {{/results}}
+    </div>
+
+    <div data-region="pie-chart" class="decision-chart decision-pie-wrap d-none">
+        <div class="decision-pie" data-region="pie"></div>
+        <div class="decision-pie-legend mt-3" data-region="pie-legend"></div>
+    </div>
+
+    {{#anonymous}}
+        <div class="alert alert-info mt-4">{{#str}}anonymousreportnotice, decision{{/str}}</div>
+    {{/anonymous}}
+
+    {{^anonymous}}
+        <div class="mt-5">
+            <h4>{{#str}}responses, decision{{/str}}</h4>
+            <div class="table-responsive">
+                <table class="table table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th>{{#str}}participant, decision{{/str}}</th>
+                            <th>{{#str}}option, decision{{/str}}</th>
+                            <th>{{#str}}lastchange, decision{{/str}}</th>
+                        </tr>
+                    </thead>
+                    <tbody data-region="response-users">
+                        {{#users}}
+                            <tr data-response-id="{{id}}">
+                                <td>{{fullname}}</td>
+                                <td>{{optiontext}}</td>
+                                <td>{{timeformatted}}</td>
+                            </tr>
+                        {{/users}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {{/anonymous}}
+
+    <div class="mt-4"><a href="{{backurl}}">{{#str}}backtoactivity, decision{{/str}}</a></div>
+</div>
