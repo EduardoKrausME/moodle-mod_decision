@@ -50,7 +50,7 @@ class restore_decision_activity_structure_step extends restore_activity_structur
     protected function process_decision($data): void {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $oldid = $data->id;
         $data->course = $this->get_courseid();
         $newitemid = $DB->insert_record("decision", $data);
@@ -67,7 +67,7 @@ class restore_decision_activity_structure_step extends restore_activity_structur
     protected function process_decision_option($data): void {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $oldid = $data->id;
         $data->decisionid = $this->get_new_parentid("decision");
         $newitemid = $DB->insert_record("decision_options", $data);
@@ -83,7 +83,7 @@ class restore_decision_activity_structure_step extends restore_activity_structur
     protected function process_decision_response($data): void {
         global $DB;
 
-        $data = (object) $data;
+        $data = (object)$data;
         $data->decisionid = $this->get_new_parentid("decision");
         $data->optionid = $this->get_new_parentid("decision_option");
         $data->userid = $this->get_mappingid("user", $data->userid);

@@ -24,6 +24,8 @@
 
 namespace mod_decision;
 
+use stdClass;
+
 /**
  * Class manager.
  */
@@ -57,7 +59,7 @@ class manager {
 
         $transaction = $DB->start_delegated_transaction();
         $record = self::prepare_record($data);
-        $record->id = (int) $data->instance;
+        $record->id = (int)$data->instance;
         $DB->update_record("decision", $record);
         repository::sync_options($record->id, $data->option ?? [], $data->optionid ?? []);
         $transaction->allow_commit();
@@ -89,19 +91,19 @@ class manager {
      * Method prepare_record.
      *
      * @param object $data Parameter data.
-     * @return \stdClass Return value.
+     * @return stdClass Return value.
      */
-    private static function prepare_record(object $data): \stdClass {
-        $record = new \stdClass();
-        $record->course = (int) $data->course;
+    private static function prepare_record(object $data): stdClass {
+        $record = new stdClass();
+        $record->course = (int)$data->course;
         $record->name = trim($data->name);
         $record->intro = $data->intro ?? "";
-        $record->introformat = (int) ($data->introformat ?? FORMAT_HTML);
+        $record->introformat = (int)($data->introformat ?? FORMAT_HTML);
         $record->question = trim($data->question);
-        $record->timeopen = (int) ($data->timeopen ?? 0);
-        $record->timeclose = (int) ($data->timeclose ?? 0);
+        $record->timeopen = (int)($data->timeopen ?? 0);
+        $record->timeclose = (int)($data->timeclose ?? 0);
         $record->allowchange = empty($data->allowchange) ? 0 : 1;
-        $record->showresults = (int) ($data->showresults ?? 1);
+        $record->showresults = (int)($data->showresults ?? 1);
         $record->anonymous = empty($data->anonymous) ? 0 : 1;
         $record->charttype = in_array(($data->charttype ?? "bar"), ["bar", "pie"], true) ? $data->charttype : "bar";
         $record->timemodified = time();

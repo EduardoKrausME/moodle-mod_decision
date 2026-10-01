@@ -63,7 +63,7 @@ class get_results extends external_api {
         require_capability("mod/decision:viewreport", $context);
 
         $decision = $DB->get_record("decision", ["id" => $cm->instance], "*", MUST_EXIST);
-        $results = repository::get_results((int) $decision->id, empty($decision->anonymous));
+        $results = repository::get_results((int)$decision->id, empty($decision->anonymous));
 
         foreach ($results["users"] as &$user) {
             $user["timeformatted"] = userdate($user["timemodified"], get_string("strftimedatetimeshort", "langconfig"));

@@ -21,11 +21,11 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define(["jquery", "core/ajax", "core/str"], function($, Ajax, Str) {
+define(["jquery", "core/ajax", "core/str"], function ($, Ajax, Str) {
     const POLL_INTERVAL = 4000;
 
-    const renderBars = function(root, data) {
-        data.options.forEach(function(option) {
+    const renderBars = function (root, data) {
+        data.options.forEach(function (option) {
             const row = root.find('[data-option-id="' + option.id + '"]');
             row.find('[data-region="count"]').text(option.count);
             row.find('[data-region="percent"]').text(option.percent);
@@ -34,7 +34,7 @@ define(["jquery", "core/ajax", "core/str"], function($, Ajax, Str) {
         });
     };
 
-    const renderPie = function(root, data) {
+    const renderPie = function (root, data) {
         const pie = root.find('[data-region="pie"]');
         const legend = root.find('[data-region="pie-legend"]');
         const palette = ["#0f6cbf", "#198754", "#fd7e14", "#6f42c1", "#dc3545", "#20c997", "#6c757d", "#d63384"];
@@ -42,7 +42,7 @@ define(["jquery", "core/ajax", "core/str"], function($, Ajax, Str) {
         const segments = [];
         legend.empty();
 
-        data.options.forEach(function(option, index) {
+        data.options.forEach(function (option, index) {
             const end = start + option.percent;
             const color = palette[index % palette.length];
             if (option.percent > 0) {
@@ -58,17 +58,17 @@ define(["jquery", "core/ajax", "core/str"], function($, Ajax, Str) {
         pie.css("background", segments.length ? "conic-gradient(" + segments.join(",") + ")" : "var(--bs-gray-200)");
     };
 
-    const renderUsers = function(root, data) {
+    const renderUsers = function (root, data) {
         const body = root.find('[data-region="response-users"]');
         if (!body.length) {
             return;
         }
         const optionMap = {};
-        data.options.forEach(function(option) {
+        data.options.forEach(function (option) {
             optionMap[option.id] = option.text;
         });
         body.empty();
-        data.users.forEach(function(user) {
+        data.users.forEach(function (user) {
             const row = $("<tr>").attr("data-response-id", user.id);
             $("<td>").text(user.fullname).appendTo(row);
             $("<td>").text(optionMap[user.optionid] || "").appendTo(row);
@@ -77,39 +77,39 @@ define(["jquery", "core/ajax", "core/str"], function($, Ajax, Str) {
         });
     };
 
-    const refresh = function(root, cmid) {
+    const refresh = function (root, cmid) {
         Ajax.call([{
             methodname: "mod_decision_get_results",
             args: {cmid: cmid},
-        }])[0].done(function(data) {
+        }])[0].done(function (data) {
             root.find('[data-region="total"]').text(data.total);
             renderBars(root, data);
             renderPie(root, data);
             renderUsers(root, data);
-        }).fail(function() {
-            Str.get_string("refreshfailed", "decision").done(function(message) {
+        }).fail(function () {
+            Str.get_string("refreshfailed", "decision").done(function (message) {
                 root.attr("data-refresh-error", message);
             });
         });
     };
 
-    const setChart = function(root, type) {
+    const setChart = function (root, type) {
         root.find('[data-region="bar-chart"]').toggleClass("d-none", type !== "bar");
         root.find('[data-region="pie-chart"]').toggleClass("d-none", type !== "pie");
     };
 
     return {
-        init: function(cmid, initialType) {
+        init: function (cmid, initialType) {
             const root = $('[data-region="decision-report"]');
             if (!root.length) {
                 return;
             }
             setChart(root, initialType);
-            root.find('[data-region="chart-type"]').on("change", function() {
+            root.find('[data-region="chart-type"]').on("change", function () {
                 setChart(root, $(this).val());
             });
             refresh(root, cmid);
-            window.setInterval(function() {
+            window.setInterval(function () {
                 refresh(root, cmid);
             }, POLL_INTERVAL);
         },

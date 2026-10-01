@@ -31,15 +31,18 @@
         <div>
             <label for="decision-chart-type" class="form-label mb-1">{{#str}}visualization, decision{{/str}}</label>
             <select id="decision-chart-type" class="form-select" data-region="chart-type">
-                <option value="bar" {{#chartbarselected}}selected{{/chartbarselected}}>{{#str}}chartbar, decision{{/str}}</option>
-                <option value="pie" {{#chartpieselected}}selected{{/chartpieselected}}>{{#str}}chartpie, decision{{/str}}</option>
+                <option value="bar" {{#chartbarselected}}selected{{/chartbarselected}}>{{#str}}
+                    chartbar, decision{{/str}}</option>
+                <option value="pie" {{#chartpieselected}}selected{{/chartpieselected}}>{{#str}}
+                    chartpie, decision{{/str}}</option>
             </select>
         </div>
     </div>
 
     <div class="decision-live-status mb-3">
         <span class="badge text-bg-success">{{#str}}live, decision{{/str}}</span>
-        <span class="ms-2">{{#str}}totalresponses, decision{{/str}}: <strong data-region="total">{{total}}</strong></span>
+        <span class="ms-2">{{#str}}totalresponses, decision{{/str}}: <strong
+                data-region="total">{{total}}</strong></span>
     </div>
 
     <div data-region="bar-chart" class="decision-chart decision-bar-chart">
@@ -49,7 +52,8 @@
                     <span data-region="label">{{text}}</span>
                     <strong><span data-region="count">{{count}}</span> · <span data-region="percent">{{percent}}</span>%</strong>
                 </div>
-                <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0"
+                     aria-valuemax="100">
                     <div class="progress-bar" data-region="bar" style="width: {{percent}}%"></div>
                 </div>
             </div>
@@ -71,20 +75,20 @@
             <div class="table-responsive">
                 <table class="table table-striped align-middle">
                     <thead>
-                        <tr>
-                            <th>{{#str}}participant, decision{{/str}}</th>
-                            <th>{{#str}}option, decision{{/str}}</th>
-                            <th>{{#str}}lastchange, decision{{/str}}</th>
-                        </tr>
+                    <tr>
+                        <th>{{#str}}participant, decision{{/str}}</th>
+                        <th>{{#str}}option, decision{{/str}}</th>
+                        <th>{{#str}}lastchange, decision{{/str}}</th>
+                    </tr>
                     </thead>
                     <tbody data-region="response-users">
-                        {{#users}}
-                            <tr data-response-id="{{id}}">
-                                <td>{{fullname}}</td>
-                                <td>{{optiontext}}</td>
-                                <td>{{timeformatted}}</td>
-                            </tr>
-                        {{/users}}
+                    {{#users}}
+                        <tr data-response-id="{{id}}">
+                            <td>{{fullname}}</td>
+                            <td>{{optiontext}}</td>
+                            <td>{{timeformatted}}</td>
+                        </tr>
+                    {{/users}}
                     </tbody>
                 </table>
             </div>

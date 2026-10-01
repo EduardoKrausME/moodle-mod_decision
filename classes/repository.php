@@ -57,12 +57,12 @@ class repository {
         $sortorder = 0;
 
         foreach ($texts as $index => $text) {
-            $text = trim((string) $text);
+            $text = trim((string)$text);
             if ($text === "") {
                 continue;
             }
 
-            $optionid = (int) ($ids[$index] ?? 0);
+            $optionid = (int)($ids[$index] ?? 0);
             if ($optionid && isset($existing[$optionid])) {
                 $record = $existing[$optionid];
                 $record->text = $text;
@@ -70,7 +70,7 @@ class repository {
                 $DB->update_record("decision_options", $record);
                 $keptids[] = $optionid;
             } else {
-                $record = (object) [
+                $record = (object)[
                     "decisionid" => $decisionid,
                     "text" => $text,
                     "sortorder" => $sortorder,
@@ -81,7 +81,7 @@ class repository {
         }
 
         foreach ($existing as $optionid => $option) {
-            if (in_array((int) $optionid, $keptids, true)) {
+            if (in_array((int)$optionid, $keptids, true)) {
                 continue;
             }
             if ($DB->record_exists("decision_responses", ["optionid" => $optionid])) {
@@ -117,14 +117,14 @@ class repository {
 
         self::require_open($decision);
         $option = $DB->get_record("decision_options", ["id" => $optionid, "decisionid" => $decision->id], "*", MUST_EXIST);
-        $existing = self::get_response((int) $decision->id, $userid);
+        $existing = self::get_response((int)$decision->id, $userid);
         $now = time();
 
         if ($existing) {
-            if (empty($decision->allowchange) && (int) $existing->optionid !== $optionid) {
+            if (empty($decision->allowchange) && (int)$existing->optionid !== $optionid) {
                 throw new moodle_exception("changernotallowed", "decision");
             }
-            if ((int) $existing->optionid !== $optionid) {
+            if ((int)$existing->optionid !== $optionid) {
                 $existing->optionid = $option->id;
                 $existing->timemodified = $now;
                 $DB->update_record("decision_responses", $existing);
@@ -132,7 +132,7 @@ class repository {
             return $existing;
         }
 
-        $response = (object) [
+        $response = (object)[
             "decisionid" => $decision->id,
             "optionid" => $option->id,
             "userid" => $userid,
@@ -165,9 +165,9 @@ class repository {
 
         $items = [];
         foreach ($options as $option) {
-            $count = (int) ($counts[$option->id] ?? 0);
+            $count = (int)($counts[$option->id] ?? 0);
             $items[] = [
-                "id" => (int) $option->id,
+                "id" => (int)$option->id,
                 "text" => $option->text,
                 "count" => $count,
                 "percent" => $total > 0 ? round(($count / $total) * 100, 1) : 0.0,
@@ -183,11 +183,11 @@ class repository {
                   ORDER BY r.timemodified DESC";
             foreach ($DB->get_records_sql($sql, ["decisionid" => $decisionid]) as $response) {
                 $users[] = [
-                    "id" => (int) $response->id,
-                    "optionid" => (int) $response->optionid,
-                    "userid" => (int) $response->userid,
+                    "id" => (int)$response->id,
+                    "optionid" => (int)$response->optionid,
+                    "userid" => (int)$response->userid,
                     "fullname" => fullname($response),
-                    "timemodified" => (int) $response->timemodified,
+                    "timemodified" => (int)$response->timemodified,
                 ];
             }
         }
@@ -204,10 +204,10 @@ class repository {
      */
     public static function is_open(object $decision, ?int $now = null): bool {
         $now ??= time();
-        if (!empty($decision->timeopen) && $now < (int) $decision->timeopen) {
+        if (!empty($decision->timeopen) && $now < (int)$decision->timeopen) {
             return false;
         }
-        if (!empty($decision->timeclose) && $now > (int) $decision->timeclose) {
+        if (!empty($decision->timeclose) && $now > (int)$decision->timeclose) {
             return false;
         }
         return true;
@@ -222,10 +222,10 @@ class repository {
      */
     public static function status(object $decision, ?int $now = null): string {
         $now ??= time();
-        if (!empty($decision->timeopen) && $now < (int) $decision->timeopen) {
+        if (!empty($decision->timeopen) && $now < (int)$decision->timeopen) {
             return "scheduled";
         }
-        if (!empty($decision->timeclose) && $now > (int) $decision->timeclose) {
+        if (!empty($decision->timeclose) && $now > (int)$decision->timeclose) {
             return "closed";
         }
         return "open";
@@ -241,11 +241,11 @@ class repository {
      */
     public static function can_show_results(object $decision, bool $hasresponded, ?int $now = null): bool {
         $now ??= time();
-        return match ((int) $decision->showresults) {
+        return match ((int)$decision->showresults) {
             0 => false,
             1 => $hasresponded,
             2 => true,
-            3 => !empty($decision->timeclose) && $now > (int) $decision->timeclose,
+            3 => !empty($decision->timeclose) && $now > (int)$decision->timeclose,
             default => false,
         };
     }

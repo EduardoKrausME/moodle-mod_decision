@@ -52,7 +52,8 @@
 
     {{#hasresponse}}
         {{^canvote}}
-            <div class="alert alert-success">{{#str}}responsealreadyrecorded, decision{{/str}} <strong>{{chosenoption}}</strong></div>
+            <div class="alert alert-success">{{#str}}responsealreadyrecorded, decision{{/str}}
+                <strong>{{chosenoption}}</strong></div>
         {{/canvote}}
     {{/hasresponse}}
 
@@ -66,7 +67,8 @@
                         <span>{{text}}</span>
                         <strong>{{count}} · {{percent}}%</strong>
                     </div>
-                    <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress" role="progressbar" aria-valuenow="{{percent}}" aria-valuemin="0"
+                         aria-valuemax="100">
                         <div class="progress-bar" style="width: {{percent}}%"></div>
                     </div>
                 </div>

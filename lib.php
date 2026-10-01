@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_decision\manager;
+
 /**
  * decision_supports
  *
@@ -47,7 +49,7 @@ function decision_supports($feature) {
  * @return int
  */
 function decision_add_instance($data, $mform = null): int {
-    return \mod_decision\manager::add_instance($data);
+    return manager::add_instance($data);
 }
 
 /**
@@ -58,7 +60,7 @@ function decision_add_instance($data, $mform = null): int {
  * @return bool
  */
 function decision_update_instance($data, $mform = null): bool {
-    return \mod_decision\manager::update_instance($data);
+    return manager::update_instance($data);
 }
 
 /**
@@ -68,5 +70,5 @@ function decision_update_instance($data, $mform = null): bool {
  * @return bool
  */
 function decision_delete_instance($id): bool {
-    return \mod_decision\manager::delete_instance($id);
+    return manager::delete_instance($id);
 }

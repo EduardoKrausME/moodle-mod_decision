@@ -42,7 +42,7 @@ $results = \mod_decision\repository::get_results($decision->id, empty($decision-
 foreach ($results["users"] as &$user) {
     $user["timeformatted"] = userdate($user["timemodified"], get_string("strftimedatetimeshort", "langconfig"));
     foreach ($results["options"] as $option) {
-        if ((int) $option["id"] === (int) $user["optionid"]) {
+        if ((int)$option["id"] === (int)$user["optionid"]) {
             $user["optiontext"] = $option["text"];
             break;
         }

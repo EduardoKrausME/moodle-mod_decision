@@ -52,7 +52,7 @@ class mod_decision_mod_form extends moodleform_mod {
         $mform->addElement("html", html_writer::tag("h3", get_string("options", "decision")));
         $repeatno = 3;
         if (!empty($this->current->instance)) {
-            $repeatno = max(3, count(\mod_decision\repository::get_options((int) $this->current->instance)));
+            $repeatno = max(3, count(\mod_decision\repository::get_options((int)$this->current->instance)));
         }
 
         $repeatarray = [];
@@ -117,7 +117,7 @@ class mod_decision_mod_form extends moodleform_mod {
             return;
         }
 
-        $options = \mod_decision\repository::get_options((int) $this->current->instance);
+        $options = \mod_decision\repository::get_options((int)$this->current->instance);
         $defaultvalues["option"] = [];
         $defaultvalues["optionid"] = [];
         foreach ($options as $option) {

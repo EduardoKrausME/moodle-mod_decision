@@ -22,6 +22,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\output\notification;
+use mod_decision\event\course_module_viewed;
+use mod_decision\event\response_submitted;
+
 require_once(__DIR__ . "/../../config.php");
 
 $id = required_param("id", PARAM_INT);
@@ -37,7 +41,7 @@ $PAGE->set_url("/mod/decision/view.php", ["id" => $cm->id]);
 $PAGE->set_title(format_string($decision->name));
 $PAGE->set_heading(format_string($course->fullname));
 
-$event = \mod_decision\event\course_module_viewed::create([
+$event = course_module_viewed::create([
     "objectid" => $decision->id,
     "context" => $context,
 ]);
@@ -55,7 +59,7 @@ if (optional_param("submitdecision", 0, PARAM_BOOL)) {
     $optionid = required_param("optionid", PARAM_INT);
     $response = \mod_decision\repository::submit_response($decision, $optionid, $USER->id);
 
-    $submitevent = \mod_decision\event\response_submitted::create([
+    $submitevent = response_submitted::create([
         "objectid" => $response->id,
         "context" => $context,
         "relateduserid" => $USER->id,
@@ -67,7 +71,7 @@ if (optional_param("submitdecision", 0, PARAM_BOOL)) {
         new moodle_url("/mod/decision/view.php", ["id" => $cm->id]),
         get_string("responsesaved", "decision"),
         null,
-        \core\output\notification::NOTIFY_SUCCESS
+        notification::NOTIFY_SUCCESS
     );
 }
 
@@ -77,14 +81,14 @@ $status = \mod_decision\repository::status($decision);
 $isopen = $status === "open";
 $cansubmit = has_capability("mod/decision:submit", $context);
 $canchange = !$response || !empty($decision->allowchange);
-$showresults = \mod_decision\repository::can_show_results($decision, (bool) $response);
+$showresults = \mod_decision\repository::can_show_results($decision, (bool)$response);
 
 $templateoptions = [];
 foreach ($options as $option) {
     $templateoptions[] = [
         "id" => $option->id,
         "text" => format_string($option->text),
-        "selected" => $response && (int) $response->optionid === (int) $option->id,
+        "selected" => $response && (int)$response->optionid === (int)$option->id,
     ];
 }
 
@@ -94,7 +98,7 @@ $data = [
     "question" => format_string($decision->question),
     "options" => $templateoptions,
     "canvote" => $cansubmit && $isopen && $canchange,
-    "hasresponse" => (bool) $response,
+    "hasresponse" => (bool)$response,
     "chosenoption" => "",
     "allowchange" => !empty($decision->allowchange),
     "statusopen" => $status === "open",
@@ -110,7 +114,7 @@ $data = [
 
 if ($response) {
     foreach ($options as $option) {
-        if ((int) $option->id === (int) $response->optionid) {
+        if ((int)$option->id === (int)$response->optionid) {
             $data["chosenoption"] = format_string($option->text);
             break;
         }
@@ -125,7 +129,7 @@ if ($showresults) {
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($decision->name));
-if (trim((string) $decision->intro) !== "") {
+if (trim((string)$decision->intro) !== "") {
     echo $OUTPUT->box(format_module_intro("decision", $decision, $cm->id), "generalbox mod_introbox", "decisionintro");
 }
 echo $OUTPUT->render_from_template("mod_decision/view", $data);
