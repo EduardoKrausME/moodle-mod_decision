@@ -1,32 +1,21 @@
 # mod_decision - Quick decision
 
-A deliberately small Moodle activity for fast single-choice decisions where there is no correct answer.
+Quick Decision is a small Moodle activity for fast single-choice decisions where there is no correct answer.
 
-Typical uses:
+Typical uses include choosing the next class topic, selecting a meeting time, prioritising projects or running a quick
+consensus check.
 
-- preferred topic for the next class;
-- best meeting or class time;
-- project selection;
-- classroom prioritisation;
-- quick consensus checks.
+## How it works
 
-## Features
+The teacher creates one question with two or more alternatives. Each participant keeps one response and, when allowed,
+can change it while the activity is open.
 
-- One question with two or more alternatives.
-- One response per participant.
-- Optional vote changes.
-- Optional opening and closing dates.
-- Results visibility: never, after voting, always, or after closing.
-- Anonymous report mode.
-- Live teacher report refreshed every four seconds.
-- Bar and pie visualisations selectable directly in the report.
-- Individual response table when the report is not anonymous.
-- Privacy API, events, activity completion view tracking and backup/restore support.
+Results can remain hidden, appear after the participant votes, remain always visible or become available only after the
+activity closes.
 
-## Installation
+## Reports
 
-Copy the `decision` directory to `mod/decision`, then visit Site administration > Notifications.
+The teacher report refreshes automatically and can display bar or pie charts. It can operate anonymously or show the
+individual response table when identification is enabled.
 
-## Compatibility
-
-Requires Moodle 4.5 or later.
+The activity also integrates with Moodle events, Privacy API, activity completion and backup/restore.
