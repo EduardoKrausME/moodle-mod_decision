@@ -27,8 +27,11 @@ namespace mod_decision\privacy;
 use context;
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
+use core_privacy\local\request\core_userlist_provider;
 use core_privacy\local\request\transform;
+use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 
 /**
@@ -36,6 +39,7 @@ use core_privacy\local\request\writer;
  */
 class provider implements
     \core_privacy\local\metadata\provider,
+    core_userlist_provider,
     \core_privacy\local\request\plugin\provider {
 
     /**
@@ -76,6 +80,30 @@ class provider implements
             "userid" => $userid,
         ]);
         return $contextlist;
+    }
+
+    /**
+     * Add users who submitted a response in the supplied context.
+     *
+     * @param userlist $userlist User list for the context.
+     * @return void
+     */
+    public static function get_users_in_context(userlist $userlist): void {
+        $context = $userlist->get_context();
+        if ($context->contextlevel !== CONTEXT_MODULE) {
+            return;
+        }
+
+        $cm = get_coursemodule_from_id("decision", $context->instanceid);
+        if (!$cm) {
+            return;
+        }
+
+        $userlist->add_from_sql(
+            "userid",
+            "SELECT userid FROM {decision_responses} WHERE decisionid = :decisionid",
+            ["decisionid" => $cm->instance]
+        );
     }
 
     /**
@@ -141,5 +169,34 @@ class provider implements
                 $DB->delete_records("decision_responses", ["decisionid" => $cm->instance, "userid" => $userid]);
             }
         }
+    }
+
+    /**
+     * Delete responses for a set of approved users in one context.
+     *
+     * @param approved_userlist $userlist Approved users.
+     * @return void
+     */
+    public static function delete_data_for_users(approved_userlist $userlist): void {
+        global $DB;
+
+        $context = $userlist->get_context();
+        $userids = $userlist->get_userids();
+        if ($context->contextlevel !== CONTEXT_MODULE || !$userids) {
+            return;
+        }
+
+        $cm = get_coursemodule_from_id("decision", $context->instanceid);
+        if (!$cm) {
+            return;
+        }
+
+        [$usersql, $userparams] = $DB->get_in_or_equal($userids, SQL_PARAMS_NAMED, "userid");
+        $params = ["decisionid" => $cm->instance] + $userparams;
+        $DB->delete_records_select(
+            "decision_responses",
+            "decisionid = :decisionid AND userid {$usersql}",
+            $params
+        );
     }
 }

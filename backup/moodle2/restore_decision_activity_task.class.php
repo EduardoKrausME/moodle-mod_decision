@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once($CFG->dirroot . "/mod/decision/backup/moodle2/restore_decision_stepslib.php");
+
 /**
  * Class restore_decision_activity_task.
  */

@@ -53,6 +53,8 @@ class restore_decision_activity_structure_step extends restore_activity_structur
         $data = (object)$data;
         $oldid = $data->id;
         $data->course = $this->get_courseid();
+        $data->timeopen = $this->apply_date_offset($data->timeopen);
+        $data->timeclose = $this->apply_date_offset($data->timeclose);
         $newitemid = $DB->insert_record("decision", $data);
         $this->apply_activity_instance($newitemid);
         $this->set_mapping("decision", $oldid, $newitemid, true);

@@ -61,13 +61,4 @@ $capabilities = [
             "manager" => CAP_ALLOW,
         ],
     ],
-    "mod/decision:manage" => [
-        "riskbitmask" => RISK_CONFIG,
-        "captype" => "write",
-        "contextlevel" => CONTEXT_MODULE,
-        "archetypes" => [
-            "editingteacher" => CAP_ALLOW,
-            "manager" => CAP_ALLOW,
-        ],
-    ],
 ];
